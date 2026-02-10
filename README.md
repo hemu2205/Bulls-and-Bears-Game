@@ -69,7 +69,7 @@ bulls_and_bears/
 
 - **Python 3.9+** installed
 - **MySQL 8.x** running locally
-- MySQL user `root` with password `root` (or configure via environment variables)
+
 
 ### Installation
 
@@ -96,8 +96,8 @@ That's it! The application will:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `DB_HOST` | `localhost` | MySQL host |
-| `DB_USER` | `root` | MySQL username |
-| `DB_PASSWORD` | `root` | MySQL password |
+| `DB_USER` | Username | MySQL username |
+| `DB_PASSWORD` |password | MySQL password |
 | `DB_NAME` | `Bulls_Bears_Game_Scores` | Database name |
 | `DB_PORT` | `3306` | MySQL port |
 | `SECRET_KEY` | (auto-generated) | Flask session secret |
@@ -222,3 +222,4 @@ Register with a username containing `admin` (e.g., `admin1`) to get admin privil
 ## 📄 License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
