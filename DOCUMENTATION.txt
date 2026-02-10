@@ -1,0 +1,251 @@
+================================================================================
+           BULLS & BEARS — Word Puzzle Arena
+           Project Documentation
+================================================================================
+
+OVERVIEW
+--------
+Bulls & Bears is a web-based 5-letter word guessing game. Players register an
+account, log in, and try to guess a secret word within 6 attempts and a
+4-minute timer. The game provides color-coded feedback after each guess to
+help narrow down the answer.
+
+This project was built for the SEF Hackathon 2026 by Team 1.
+
+
+HOW THE GAME WORKS
+------------------
+1. Register a new account or log in with an existing one
+2. Read the game rules on the Mission Briefing page
+3. Click "Let's Play" to start a new round
+4. Type a 5-letter word and press Enter or click Submit
+5. After each guess, you receive feedback:
+   - GREEN (Bull)  = Correct letter in the correct position
+   - YELLOW (Bear) = Correct letter in the wrong position
+   - GRAY (Miss)   = Letter is not in the word at all
+6. Keep guessing until you solve it or run out of attempts/time
+7. After the game, you can Play Again or view the Leaderboard
+
+
+SCORING RULES
+-------------
+- You get +1 point for successfully guessing the word
+- You get +0.1 points for every second remaining on the 4-minute clock
+- If you lose, your score is 0 (no negative marking)
+- Leaderboard ranks players by highest score, then fastest time
+
+
+WHAT YOU NEED TO RUN THIS
+-------------------------
+1. Python 3.9 or newer (download from https://python.org)
+2. MySQL 8.x database server (download from https://dev.mysql.com/downloads/)
+3. A web browser (Chrome, Firefox, Edge, etc.)
+
+
+HOW TO SET UP AND RUN
+---------------------
+Step 1: Make sure MySQL is running on your computer
+       - Default login: username = root, password = root
+       - The app will create the database automatically
+
+Step 2: Open a terminal/command prompt
+
+Step 3: Navigate to the project folder:
+       cd "c:\SEF Hackathon\team1\bulls_and_bears"
+
+Step 4: Install the required Python packages:
+       pip install -r requirements.txt
+
+Step 5: Start the application:
+       python main.py
+
+Step 6: Open your browser and go to:
+       http://127.0.0.1:5000
+
+That's it! The application handles everything else automatically:
+  - Creates the database (Bulls_Bears_Game_Scores)
+  - Creates all the tables
+  - Loads 160+ five-letter words into the database
+
+
+PROJECT FILES
+-------------
+There are only 6 files in this project:
+
+  main.py          - The Python server. This is the only file you run.
+                     It handles user accounts, the game logic, scoring,
+                     and the leaderboard. It also sets up the database
+                     automatically when you first run it.
+
+  index.html       - The web page. Contains all four screens of the app:
+                     Login/Register, Game Rules, the Game Board, and
+                     the Leaderboard. Also has popup windows for viewing
+                     game results and editing your profile.
+
+  style.css        - All the visual design. Dark theme with glass-like
+                     transparent cards, purple and cyan accent colors,
+                     smooth animations, and mobile-friendly layout.
+
+  game.js          - The interactive logic that runs in your browser.
+                     Handles switching between screens, sending your
+                     guesses to the server, animating the letter tiles,
+                     tracking which letters you've used, running the
+                     countdown timer, and updating the leaderboard.
+
+  schema.sql       - A reference file showing the database structure.
+                     You do NOT need to run this manually — main.py
+                     creates the tables automatically.
+
+  requirements.txt - Lists the Python packages needed:
+                     flask, mysql-connector-python, werkzeug
+
+
+APPLICATION PAGES
+-----------------
+Page 1 - Login/Register
+   The first thing you see. Has the "Bulls & Bears" title prominently
+   displayed. You can create a new account or sign in to an existing one.
+
+Page 2 - Mission Briefing (Game Rules)
+   Explains how the game works with visual cards for each rule.
+   Has a large "Let's Play" button to start the game.
+
+Page 3 - The Arena (Game Board)
+   The main game screen. Shows:
+   - A 6x5 grid for your guesses
+   - A countdown timer (starts at 4:00)
+   - An attempt counter (0/6)
+   - A text input for typing your guess
+   - A keyboard tracker showing which letters are used
+
+Page 4 - Leaderboard
+   Shows the top 20 players ranked by score. The top 3 players get
+   a special podium display with gold, silver, and bronze medals.
+
+Profile Popup
+   Click your name in the top-right corner to:
+   - See your game statistics (total games, wins, win rate, best score)
+   - Edit your display name and email
+
+Result Popup
+   Appears after each game showing:
+   - Whether you won or lost
+   - The correct word
+   - Your score (if you won)
+   - Buttons to Play Again or view the Leaderboard
+
+
+APPLICATION WORKFLOW
+--------------------
+Below is the complete flow of how a user moves through the application:
+
+                          +------------------+
+                          |   AUTH PAGE      |
+                          |  Login/Register  |
+                          +--------+---------+
+                                   |
+                            Login Success
+                                   |
+                          +--------v---------+
+                          |  MISSION BRIEFING |
+                          |   (Game Rules)    |<-----------+
+                          +--------+---------+             |
+                             |           |                 |
+                       Let's Play    Profile            Back to
+                             |           |               Home
+                    +--------v----+  +---v----------+     |
+                    | GAME ARENA  |  | PROFILE MODAL|     |
+                    | 5-letter    |  | Edit Name    |     |
+                    | word puzzle |  | View Stats   |     |
+                    +------+------+  +--------------+     |
+                           |                              |
+                    Submit Guess                          |
+                           |                              |
+                    +------v------+                       |
+                    |  FEEDBACK   |                       |
+                    | Green/Yellow|                       |
+                    |   /Gray     |                       |
+                    +------+------+                       |
+                           |                              |
+                    +------v------+                       |
+                    | GAME OVER?  |                       |
+                    +--+-------+--+                       |
+                       |       |                          |
+                      NO      YES                        |
+                       |       |                          |
+                 +-----v--+   +v-----------+              |
+                 | KEEP   |   |  RESULT    |              |
+                 | PLAYING |   |  MODAL    |              |
+                 | (back  |   | Win: Score |              |
+                 | to     |   | Loss: Word |              |
+                 | Arena) |   +--+------+--+              |
+                 +--------+      |      |                 |
+                          Play Again  View                |
+                              |     Leaderboard           |
+                    +---------v--+  +--v-----------+      |
+                    | GAME ARENA |  | LEADERBOARD  |      |
+                    | (new round)|  | Top 20       +------+
+                    +------------+  | Players      |
+                                    | with Podium  |
+                                    +--------------+
+
+Step-by-step:
+  1. User arrives at AUTH PAGE → Registers or Logs in
+  2. After login → MISSION BRIEFING shows rules and scoring
+  3. Click "Let's Play" → GAME ARENA starts with 4-min timer
+  4. Type a 5-letter word → Submit → Get GREEN/YELLOW/GRAY feedback
+  5. If not solved and attempts remain → Keep guessing
+  6. If solved (WIN) → RESULT MODAL shows score + correct word
+  7. If failed (LOSS) → RESULT MODAL reveals the correct word
+  8. From Result → "Play Again" starts a new round
+  9. From Result → "View Leaderboard" shows top 20 rankings
+  10. From Leaderboard → "Back to Home" returns to Mission Briefing
+  11. Profile can be accessed anytime from the navigation bar
+
+
+DATABASE DETAILS
+----------------
+Database Name: Bulls_Bears_Game_Scores
+Username: root
+Password: root
+Port: 3306 (default MySQL port)
+
+Tables:
+  users     - Stores player accounts (username, hashed password, etc.)
+  words     - Contains 160+ valid 5-letter English words
+  scores    - Records every game result (score, attempts, win/loss)
+  attempts  - Logs every individual guess with feedback colors
+
+
+TECHNOLOGY USED
+---------------
+- Backend:     Python 3 with Flask web framework
+- Frontend:    HTML5, CSS3, JavaScript (ES6+)
+- Database:    MySQL 8.x
+- Security:    Werkzeug password hashing (bcrypt-level security)
+- Design:      Dark glassmorphism theme with Inter font (Google Fonts)
+
+
+TROUBLESHOOTING
+---------------
+Problem: "Connection failed" error when starting
+   → Make sure MySQL is running and the root/root credentials work
+   → Try: mysql -u root -proot (in terminal) to test the connection
+
+Problem: "No words in database" error during gameplay
+   → Restart the app with: python main.py
+   → This will re-seed the words table if it's empty
+
+Problem: Page looks broken or unstyled
+   → Clear your browser cache (Ctrl+Shift+R for hard refresh)
+   → Make sure all 6 files are in the same folder
+
+Problem: Port 5000 already in use
+   → Close any other application using port 5000
+   → Or change the port in main.py (last line: app.run(port=5001))
+
+
+================================================================================
+                    Built with care for SEF Hackathon 2026
+                              Team 1
+================================================================================

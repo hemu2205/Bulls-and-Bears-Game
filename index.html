@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulls &amp; Bears — Word Puzzle Arena</title>
+    <meta name="description" content="Bulls & Bears: A professional 5-letter word puzzle game. Test your vocabulary, race the clock, and climb the leaderboard.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         PAGE 1 — AUTH (Login / Register)
+         ═══════════════════════════════════════════════════════════════ -->
+    <section id="auth-view" class="view active-view">
+        <div class="auth-bg-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+        <div class="auth-wrapper">
+            <div class="auth-brand">
+                <div class="brand-icon">
+                    <span class="emoji-bull">🐂</span>
+                    <span class="emoji-bear">🐻</span>
+                </div>
+                <h1 class="brand-title">Bulls <span class="amp">&amp;</span> Bears</h1>
+                <p class="brand-tagline">The Ultimate Word Puzzle Arena</p>
+            </div>
+
+            <div class="auth-card glass-card">
+                <h2 id="auth-heading">Welcome Back</h2>
+                <p id="auth-subtext" class="auth-sub">Log in to continue your streak</p>
+
+                <div id="auth-error" class="auth-error hidden"></div>
+
+                <div id="register-extra-fields" class="hidden">
+                    <div class="input-group">
+                        <label for="auth-display">Display Name</label>
+                        <input type="text" id="auth-display" placeholder="How should we call you?" autocomplete="name">
+                    </div>
+                    <div class="input-group">
+                        <label for="auth-email">Email <span class="optional">(optional)</span></label>
+                        <input type="email" id="auth-email" placeholder="your@email.com" autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="auth-user">Username</label>
+                    <input type="text" id="auth-user" placeholder="Enter your username" autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label for="auth-pass">Password</label>
+                    <input type="password" id="auth-pass" placeholder="Enter your password" autocomplete="current-password">
+                </div>
+
+                <button id="auth-submit-btn" class="btn btn-primary btn-full" onclick="handleAuth()">
+                    <span id="auth-btn-text">Sign In</span>
+                    <span id="auth-btn-loader" class="loader hidden"></span>
+                </button>
+
+                <div class="auth-toggle">
+                    <span id="auth-toggle-text">Don't have an account?</span>
+                    <a href="#" id="auth-toggle-link" onclick="toggleAuthMode(event)">Create one</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         PAGE 2 — ONBOARDING / GAME RULES
+         ═══════════════════════════════════════════════════════════════ -->
+    <section id="rules-view" class="view">
+        <nav class="top-nav">
+            <div class="nav-brand" onclick="navigateTo('rules')">
+                <span>🐂</span> Bulls &amp; Bears <span>🐻</span>
+            </div>
+            <div class="nav-right">
+                <button class="btn btn-ghost" onclick="openProfile()" id="nav-profile-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span id="nav-username">Profile</span>
+                </button>
+                <button class="btn btn-ghost btn-danger-text" onclick="handleLogout()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Logout
+                </button>
+            </div>
+        </nav>
+
+        <div class="rules-container">
+            <div class="rules-hero">
+                <h1 class="rules-title">Mission<br>Briefing</h1>
+                <p class="rules-subtitle">Crack the 5-letter code before time runs out</p>
+            </div>
+
+            <div class="rules-grid">
+                <div class="rule-card glass-card">
+                    <div class="rule-icon">🎯</div>
+                    <h3>Objective</h3>
+                    <p>Guess the secret <strong>5-letter word</strong> within <strong>6 attempts</strong> and a <strong>4-minute</strong> timer.</p>
+                </div>
+                <div class="rule-card glass-card">
+                    <div class="rule-icon">🟩</div>
+                    <h3>Bulls (Green)</h3>
+                    <p>The letter is <strong>correct</strong> and in the <strong>right position</strong>. You nailed it!</p>
+                </div>
+                <div class="rule-card glass-card">
+                    <div class="rule-icon">🟨</div>
+                    <h3>Bears (Yellow)</h3>
+                    <p>The letter <strong>exists</strong> in the word but is in the <strong>wrong spot</strong>.</p>
+                </div>
+                <div class="rule-card glass-card">
+                    <div class="rule-icon">⬛</div>
+                    <h3>Miss (Gray)</h3>
+                    <p>The letter is <strong>not</strong> in the word at all. Eliminate and move on.</p>
+                </div>
+                <div class="rule-card glass-card">
+                    <div class="rule-icon">⚡</div>
+                    <h3>Scoring</h3>
+                    <p><strong>+1 point</strong> for a correct guess, plus <strong>+0.1 per second</strong> saved from the 4-minute clock.</p>
+                </div>
+                <div class="rule-card glass-card">
+                    <div class="rule-icon">🏆</div>
+                    <h3>Leaderboard</h3>
+                    <p>Top scorers are ranked by score and speed. Compete for the <strong>#1 spot</strong>!</p>
+                </div>
+            </div>
+
+            <button class="btn btn-play pulse-glow" onclick="startNewGame()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Let's Play
+            </button>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         PAGE 3 — THE ARENA (Game Board)
+         ═══════════════════════════════════════════════════════════════ -->
+    <section id="game-view" class="view">
+        <nav class="top-nav">
+            <div class="nav-brand" onclick="navigateTo('rules')">
+                <span>🐂</span> Bulls &amp; Bears <span>🐻</span>
+            </div>
+            <div class="nav-right">
+                <button class="btn btn-ghost" onclick="openProfile()" id="nav-profile-btn-game">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span id="nav-username-game">Profile</span>
+                </button>
+                <button class="btn btn-ghost btn-danger-text" onclick="handleLogout()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Logout
+                </button>
+            </div>
+        </nav>
+
+        <div class="arena-container">
+            <!-- Stats Bar -->
+            <div class="stats-bar glass-card">
+                <div class="stat">
+                    <span class="stat-label">ATTEMPTS</span>
+                    <span class="stat-value" id="attempts-display">0 / 6</span>
+                </div>
+                <div class="stat stat-timer" id="timer-stat">
+                    <span class="stat-label">TIME LEFT</span>
+                    <span class="stat-value stat-timer-value" id="timer-display">04:00</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">PLAYER</span>
+                    <span class="stat-value stat-player" id="player-display">—</span>
+                </div>
+            </div>
+
+            <!-- Game Grid -->
+            <div id="game-grid" class="game-grid">
+                <!-- Generated by JS -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <input type="text" id="word-input" maxlength="5" placeholder="Type a 5-letter word..." autocomplete="off" spellcheck="false">
+                <button id="submit-btn" class="btn btn-primary" onclick="submitGuess()" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    Submit
+                </button>
+            </div>
+
+            <!-- Keyboard Tracker -->
+            <div id="keyboard-tracker" class="keyboard-tracker">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         PAGE 4 — LEADERBOARD
+         ═══════════════════════════════════════════════════════════════ -->
+    <section id="leaderboard-view" class="view">
+        <nav class="top-nav">
+            <div class="nav-brand" onclick="navigateTo('rules')">
+                <span>🐂</span> Bulls &amp; Bears <span>🐻</span>
+            </div>
+            <div class="nav-right">
+                <button class="btn btn-ghost" onclick="navigateTo('rules')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Home
+                </button>
+                <button class="btn btn-ghost btn-danger-text" onclick="handleLogout()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Logout
+                </button>
+            </div>
+        </nav>
+
+        <div class="lb-container">
+            <div class="lb-header">
+                <h1 class="lb-title">🏆 Leaderboard</h1>
+                <p class="lb-subtitle">Top players ranked by score and speed</p>
+            </div>
+
+            <!-- Podium for Top 3 -->
+            <div id="podium" class="podium hidden">
+                <div class="podium-slot podium-2" id="podium-2">
+                    <div class="podium-avatar">🥈</div>
+                    <div class="podium-name">—</div>
+                    <div class="podium-score">—</div>
+                    <div class="podium-bar bar-2"></div>
+                </div>
+                <div class="podium-slot podium-1" id="podium-1">
+                    <div class="podium-avatar">🥇</div>
+                    <div class="podium-name">—</div>
+                    <div class="podium-score">—</div>
+                    <div class="podium-bar bar-1"></div>
+                </div>
+                <div class="podium-slot podium-3" id="podium-3">
+                    <div class="podium-avatar">🥉</div>
+                    <div class="podium-name">—</div>
+                    <div class="podium-score">—</div>
+                    <div class="podium-bar bar-3"></div>
+                </div>
+            </div>
+
+            <!-- Full Table -->
+            <div class="lb-table-wrap glass-card">
+                <table id="lb-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Score</th>
+                            <th>Attempts</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lb-tbody">
+                        <tr><td colspan="5" class="lb-empty">No scores yet. Be the first champion!</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="lb-actions">
+                <button class="btn btn-primary" onclick="startNewGame()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    Play Again
+                </button>
+                <button class="btn btn-outline" onclick="navigateTo('rules')">Back to Home</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         MODAL — Game Result (Win / Loss)
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="result-modal" class="modal-overlay hidden">
+        <div class="modal-card glass-card result-card">
+            <div id="result-confetti" class="confetti-container"></div>
+            <div class="result-icon" id="result-icon">🎉</div>
+            <h2 id="result-title" class="result-title">Victory!</h2>
+            <p id="result-word" class="result-word"></p>
+            <p id="result-message" class="result-message"></p>
+            <div id="result-score-box" class="result-score-box">
+                <span class="result-score-label">Your Score</span>
+                <span class="result-score-value" id="result-score">0</span>
+            </div>
+            <div class="result-actions">
+                <button class="btn btn-primary" onclick="playAgain()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                    Play Again
+                </button>
+                <button class="btn btn-outline" onclick="viewLeaderboard()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                    View Leaderboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         MODAL — Profile Editor
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="profile-modal" class="modal-overlay hidden">
+        <div class="modal-card glass-card profile-card">
+            <button class="modal-close" onclick="closeModal('profile-modal')">&times;</button>
+            <div class="profile-header">
+                <div class="profile-avatar" id="profile-avatar">?</div>
+                <h2>Edit Profile</h2>
+            </div>
+
+            <div id="profile-stats" class="profile-stats">
+                <div class="p-stat"><span class="p-stat-val" id="p-total">0</span><span class="p-stat-lbl">Games</span></div>
+                <div class="p-stat"><span class="p-stat-val" id="p-wins">0</span><span class="p-stat-lbl">Wins</span></div>
+                <div class="p-stat"><span class="p-stat-val" id="p-rate">0%</span><span class="p-stat-lbl">Win Rate</span></div>
+                <div class="p-stat"><span class="p-stat-val" id="p-best">0</span><span class="p-stat-lbl">Best Score</span></div>
+            </div>
+
+            <div id="profile-error" class="auth-error hidden"></div>
+
+            <div class="input-group">
+                <label for="profile-display">Display Name</label>
+                <input type="text" id="profile-display" placeholder="Display Name">
+            </div>
+            <div class="input-group">
+                <label for="profile-email">Email</label>
+                <input type="email" id="profile-email" placeholder="Email address">
+            </div>
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="profile-username" disabled>
+            </div>
+            <div class="input-group">
+                <label>Member Since</label>
+                <input type="text" id="profile-since" disabled>
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="saveProfile()">Save Changes</button>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         TOAST NOTIFICATION
+         ═══════════════════════════════════════════════════════════════ -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="game.js"></script>
+</body>
+</html>
