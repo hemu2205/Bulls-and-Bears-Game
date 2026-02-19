@@ -89,7 +89,7 @@ That's it! The application will:
 - ✅ Create the `Bulls_Bears_Game_Scores` database automatically
 - ✅ Create all required tables (`users`, `words`, `scores`, `attempts`)
 - ✅ Seed 160+ five-letter words
-- ✅ Start the Flask server on **http://127.0.0.1:5000**
+
 
 ### Environment Variables (Optional)
 
@@ -222,3 +222,4 @@ Register with a username containing `admin` (e.g., `admin1`) to get admin privil
 ## 📄 License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
